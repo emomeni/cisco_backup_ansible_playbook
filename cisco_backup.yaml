@@ -1,0 +1,93 @@
+---
+- name: Backup Cisco Network Devices
+  hosts: cisco_devices
+  gather_facts: no
+  connection: network_cli
+  vars:
+    backup_dir: "{{ playbook_dir }}/backups"
+    retention_days: 30  # Optional: for cleanup task
+  
+  tasks:
+    - name: Generate timestamp once
+      set_fact:
+        timestamp: "{{ lookup('pipe', 'date +%Y%m%d_%H%M%S') }}"
+      run_once: true
+      delegate_to: localhost
+
+    - name: Create backup directory if it doesn't exist
+      file:
+        path: "{{ backup_dir }}/{{ timestamp }}"
+        state: directory
+        mode: '0755'
+      delegate_to: localhost
+      run_once: true
+
+    - name: Initialize backup summary log
+      copy:
+        content: |
+          ====================================
+          Backup Run Started: {{ ansible_date_time.iso8601 }}
+          ====================================
+        dest: "{{ backup_dir }}/{{ timestamp }}/backup_summary.log"
+      delegate_to: localhost
+      run_once: true
+
+    - block:
+        - name: Backup IOS/IOS-XE devices
+          cisco.ios.ios_config:
+            backup: yes
+            backup_options:
+              filename: "{{ inventory_hostname }}_{{ timestamp }}.cfg"
+              dir_path: "{{ backup_dir }}/{{ timestamp }}"
+          when: ansible_network_os in ['ios', 'cisco.ios.ios']
+          register: ios_result
+
+        - name: Backup NX-OS devices
+          cisco.nxos.nxos_config:
+            backup: yes
+            backup_options:
+              filename: "{{ inventory_hostname }}_{{ timestamp }}.cfg"
+              dir_path: "{{ backup_dir }}/{{ timestamp }}"
+          when: ansible_network_os in ['nxos', 'cisco.nxos.nxos']
+          register: nxos_result
+
+        - name: Write success entry
+          lineinfile:
+            path: "{{ backup_dir }}/{{ timestamp }}/backup_summary.log"
+            line: "{{ ansible_date_time.iso8601 }} - {{ inventory_hostname }} - {{ ansible_network_os }} - SUCCESS"
+            create: yes
+          delegate_to: localhost
+
+      rescue:
+        - name: Write failure entry
+          lineinfile:
+            path: "{{ backup_dir }}/{{ timestamp }}/backup_summary.log"
+            line: "{{ ansible_date_time.iso8601 }} - {{ inventory_hostname }} - {{ ansible_network_os }} - FAILED - {{ ansible_failed_result.msg | default('Unknown error') }}"
+            create: yes
+          delegate_to: localhost
+
+    - name: Display completion message
+      debug:
+        msg: "✅ Backup completed for {{ inventory_hostname }} - saved in {{ backup_dir }}/{{ timestamp }}"
+
+    # Optional: Cleanup old backups
+    - name: Find old backup directories
+      find:
+        paths: "{{ backup_dir }}"
+        file_type: directory
+        age: "{{ retention_days }}d"
+      delegate_to: localhost
+      run_once: true
+      register: old_backups
+      when: retention_days is defined
+
+    - name: Remove old backups
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ old_backups.files }}"
+      delegate_to: localhost
+      run_once: true
+      when: 
+        - retention_days is defined
+        - old_backups.files is defined
