@@ -1,0 +1,61 @@
+---
+# vault.yaml
+# Encrypted credentials file - MUST be encrypted with ansible-vault
+# 
+# To encrypt this file:
+#   ansible-vault encrypt vault.yaml
+# 
+# To edit encrypted file:
+#   ansible-vault edit vault.yaml
+# 
+# To decrypt (for viewing only):
+#   ansible-vault decrypt vault.yaml
+
+# =====================================================
+# CISCO DEVICE CREDENTIALS
+# =====================================================
+vault_ansible_user: "admin"
+vault_ansible_password: "YourSecurePassword123!"
+vault_ansible_become_password: "YourEnablePassword456!"
+
+# =====================================================
+# DEVICE-SPECIFIC CREDENTIALS (if needed)
+# =====================================================
+# Core routers with different credentials
+vault_core_router_01_password: "CoreRouter01Pass!"
+vault_core_router_02_password: "CoreRouter02Pass!"
+
+# Nexus devices with different credentials
+vault_nexus_user: "nexus-admin"
+vault_nexus_password: "NexusSecurePass789!"
+vault_nexus_enable_password: "NexusEnablePass!"
+
+# =====================================================
+# NOTIFICATION CREDENTIALS
+# =====================================================
+# Email/SMTP credentials
+vault_smtp_password: "SmtpPassword123!"
+
+# Slack webhook URL
+vault_slack_webhook: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+
+# =====================================================
+# API CREDENTIALS (if using REST APIs)
+# =====================================================
+vault_api_token: "your-api-token-here"
+vault_api_secret: "your-api-secret-here"
+
+# =====================================================
+# TACACS+/RADIUS CREDENTIALS (if applicable)
+# =====================================================
+vault_tacacs_key: "tacacs-shared-key"
+vault_radius_secret: "radius-shared-secret"
+
+# =====================================================
+# SNMP CREDENTIALS (if needed for monitoring)
+# =====================================================
+vault_snmp_community_ro: "public-read-only"
+vault_snmp_community_rw: "private-read-write"
+vault_snmpv3_user: "snmpv3-user"
+vault_snmpv3_auth_pass: "snmpv3-auth-password"
+vault_snmpv3_priv_pass: "snmpv3-priv-password"
