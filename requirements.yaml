@@ -1,0 +1,6 @@
+---
+collections:
+  - name: cisco.ios
+    version: ">=5.0.0"
+  - name: cisco.nxos
+    version: ">=5.0.0"

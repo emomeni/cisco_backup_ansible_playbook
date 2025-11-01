@@ -1,0 +1,38 @@
+---
+# group_vars/ios_devices.yml
+# Variables specific to IOS/IOS-XE devices
+
+# =====================================================
+# PLATFORM IDENTIFICATION
+# =====================================================
+ansible_network_os: cisco.ios.ios
+
+# =====================================================
+# IOS-SPECIFIC CONNECTION SETTINGS
+# =====================================================
+# Privilege escalation for IOS
+ansible_become: yes
+ansible_become_method: enable
+
+# IOS command timeout (some commands may take longer)
+ansible_command_timeout: 90
+
+# =====================================================
+# IOS-SPECIFIC BACKUP OPTIONS
+# =====================================================
+# Include additional show commands in backup (optional)
+backup_additional_commands:
+  - "show version"
+  - "show inventory"
+  - "show ip interface brief"
+  - "show vlan brief"
+
+# =====================================================
+# IOS PLATFORM NOTES
+# =====================================================
+# Platform variations supported:
+# - IOS (15.x)
+# - IOS-XE (16.x, 17.x)
+# - Catalyst switches
+# - ISR/ASR routers
+platform_type: "ios"

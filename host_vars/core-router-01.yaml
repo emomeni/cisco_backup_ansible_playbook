@@ -1,0 +1,72 @@
+---
+# host_vars/core-router-01.yml
+# Host-specific variables for core-router-01
+
+# =====================================================
+# DEVICE IDENTIFICATION
+# =====================================================
+device_name: "Core Router 01"
+device_location: "HQ - Data Center - Rack 12"
+device_role: "core"
+device_site: "headquarters"
+
+# =====================================================
+# DEVICE-SPECIFIC CONNECTION OVERRIDES
+# =====================================================
+# Uncomment to override group variables for this specific device
+# ansible_host: 192.168.1.10
+# ansible_port: 2222  # If using non-standard SSH port
+# ansible_user: admin-special
+# ansible_password: "{{ vault_core_router_01_password }}"
+
+# =====================================================
+# DEVICE-SPECIFIC SETTINGS
+# =====================================================
+# Some devices may need longer timeouts
+# ansible_command_timeout: 120
+
+# Device has slower CPU, needs more time
+# ansible_connect_timeout: 90
+
+# =====================================================
+# BACKUP-SPECIFIC SETTINGS
+# =====================================================
+# Device-specific retention (override global setting)
+# retention_days: 90  # Keep core router backups longer
+
+# Priority for this device
+backup_priority: "critical"
+
+# =====================================================
+# MAINTENANCE WINDOW
+# =====================================================
+maintenance_window:
+  day: "Sunday"
+  start_time: "02:00"
+  end_time: "06:00"
+  timezone: "UTC"
+
+# =====================================================
+# DEVICE METADATA (for documentation/CMDB)
+# =====================================================
+device_metadata:
+  model: "Cisco ISR 4451"
+  serial_number: "FDO12345678"
+  ios_version: "17.3.4a"
+  purchase_date: "2023-01-15"
+  warranty_expiry: "2026-01-15"
+  support_contract: "CON-SNT-ISR4451"
+  
+# Contact information
+device_contacts:
+  primary: "network-team@example.com"
+  secondary: "noc@example.com"
+  phone: "+1-555-0100"
+
+# =====================================================
+# NOTES
+# =====================================================
+device_notes: |
+  Core router handling all Internet traffic.
+  Critical device - requires change control for any modifications.
+  Backup every 6 hours during business hours.

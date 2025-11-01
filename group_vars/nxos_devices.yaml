@@ -1,0 +1,49 @@
+---
+# group_vars/nxos_devices.yml
+# Variables specific to NX-OS devices
+
+# =====================================================
+# PLATFORM IDENTIFICATION
+# =====================================================
+ansible_network_os: cisco.nxos.nxos
+
+# =====================================================
+# NX-OS-SPECIFIC CONNECTION SETTINGS
+# =====================================================
+# Privilege escalation for NX-OS
+ansible_become: yes
+ansible_become_method: enable
+
+# NX-OS may need longer timeout for complex configs
+ansible_command_timeout: 120
+
+# =====================================================
+# NX-OS-SPECIFIC BACKUP OPTIONS
+# =====================================================
+# Include additional show commands in backup (optional)
+backup_additional_commands:
+  - "show version"
+  - "show inventory"
+  - "show interface brief"
+  - "show vlan brief"
+  - "show vpc"
+  - "show feature"
+
+# =====================================================
+# NX-OS PLATFORM NOTES
+# =====================================================
+# Platform variations supported:
+# - Nexus 9000 series
+# - Nexus 7000 series
+# - Nexus 5000 series
+# - Nexus 3000 series
+platform_type: "nxos"
+
+# =====================================================
+# NX-OS SPECIFIC FEATURES
+# =====================================================
+# Some NX-OS devices use different authentication
+# Uncomment if using NXAPI instead of CLI
+# ansible_connection: httpapi
+# ansible_httpapi_use_ssl: yes
+# ansible_httpapi_validate_certs: no
