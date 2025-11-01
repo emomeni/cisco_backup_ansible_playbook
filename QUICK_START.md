@@ -18,52 +18,52 @@
 
 4. **Run Backup:**
    ```bash
-   ansible-playbook backup_playbook.yml
+   ansible-playbook cisco_backup.yaml
    ```
 
 ## Using Ansible Vault (Recommended)
 
 1. **Encrypt vault file:**
    ```bash
-   ansible-vault encrypt vault.yml
+   ansible-vault encrypt vault.yaml
    ```
 
 2. **Edit encrypted vault:**
    ```bash
-   ansible-vault edit vault.yml
+   ansible-vault edit vault.yaml
    ```
 
 3. **Run with vault:**
    ```bash
-   ansible-playbook backup_playbook.yml --ask-vault-pass
+   ansible-playbook cisco_backup.yaml --ask-vault-pass
    ```
 
 4. **Use vault password file:**
    ```bash
    echo "your-vault-password" > .vault_pass
    chmod 600 .vault_pass
-   ansible-playbook backup_playbook.yml --vault-password-file .vault_pass
+   ansible-playbook cisco_backup.yaml --vault-password-file .vault_pass
    ```
 
 ## Directory Structure
 
 ```
 cisco-backup/
-├── ansible.cfg                 # Ansible configuration
-├── inventory.ini               # Device inventory
-├── cisco_backup.yaml         # Main backup playbook
-├── vault.yml                   # Encrypted credentials
-├── group_vars/                 # Group variables
-│   ├── all.yml                 # Global variables
-│   ├── ios_devices.yml         # IOS-specific variables
-│   └── nxos_devices.yml        # NX-OS-specific variables
-├── host_vars/                  # Host-specific variables
-│   ├── core-router-01.yml      # Example host variables
-│   └── nexus-core-01.yml       # Example host variables
-├── backups/                    # Backup storage (auto-created)
-│   └── YYYYMMDD_HHMMSS/        # Timestamped backup folders
-└── logs/                       # Log files
-    └── ansible.log             # Ansible execution logs
+├── ansible.cfg                  # Ansible configuration
+├── inventory.ini                # Device inventory
+├── cisco_backup.yaml            # Main backup playbook
+├── vault.yaml                   # Encrypted credentials
+├── group_vars/                  # Group variables
+│   ├── all.yaml                 # Global variables
+│   ├── ios_devices.yaml         # IOS-specific variables
+│   └── nxos_devices.yaml        # NX-OS-specific variables
+├── host_vars/                   # Host-specific variables
+│   ├── core-router-01.yaml      # Example host variables
+│   └── nexus-core-01.yaml       # Example host variables
+├── backups/                     # Backup storage (auto-created)
+│   └── YYYYMMDD_HHMMSS/         # Timestamped backup folders
+└── logs/                        # Log files
+    └── ansible.log              # Ansible execution logs
 ```
 
 ## Common Commands
